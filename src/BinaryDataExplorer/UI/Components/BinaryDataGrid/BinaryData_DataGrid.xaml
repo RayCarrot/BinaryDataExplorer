@@ -1,0 +1,59 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                    xmlns:local="clr-namespace:BinaryDataExplorer">
+
+    <Thickness x:Key="BinaryData_DataGridCell.Margin">5 2</Thickness>
+
+    <DataTemplate x:Key="BinaryData_DataGridCell.Value.Default" DataType="{x:Type local:BinaryData_FlattenedHierarchialDataItemViewModel}">
+        <Grid Margin="{StaticResource BinaryData_DataGridCell.Margin}" DataContext="{Binding Path=Data}">
+            <TextBlock Grid.Column="0"
+                       TextTrimming="CharacterEllipsis"
+                       Text="{Binding Path=Value}" />
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="BinaryData_DataGridCell.Value.BaseColor" DataType="{x:Type local:BinaryData_FlattenedHierarchialDataItemViewModel}">
+        <Grid Margin="{StaticResource BinaryData_DataGridCell.Margin}" DataContext="{Binding Path=Data}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0"
+                       TextTrimming="CharacterEllipsis"
+                       Text="{Binding Path=Value}" />
+
+            <Border Grid.Column="1"
+                    Margin="15 0 0 0"
+                    Width="{Binding RelativeSource={RelativeSource Mode=Self}, Path=ActualHeight}"
+                    Background="{Binding Path=ColorBrush}" />
+
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="BinaryData_DataGridCell.Value.Pointer" DataType="{x:Type local:BinaryData_FlattenedHierarchialDataItemViewModel}">
+        <Grid Margin="{StaticResource BinaryData_DataGridCell.Margin}" DataContext="{Binding Path=Data}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0"
+                       TextTrimming="CharacterEllipsis"
+                       Text="{Binding Path=Value}" />
+
+            <Button Grid.Column="1"
+                    Command="{Binding Path=NavigateToPointerCommand, Mode=OneTime}"
+                    ToolTip="Navigate To"
+                    Margin="15 0 0 0"
+                    Style="{StaticResource Styles.Button.FlatButton}">
+                <iconPacks:PackIconMaterial Kind="ArrowRightCircleOutline"
+                                            Background="Transparent"
+                                            VerticalAlignment="Center"/>
+            </Button>
+
+        </Grid>
+    </DataTemplate>
+
+</ResourceDictionary>

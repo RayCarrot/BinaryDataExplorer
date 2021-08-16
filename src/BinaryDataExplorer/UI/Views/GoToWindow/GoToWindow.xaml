@@ -1,0 +1,56 @@
+﻿<local:BaseWindow x:Class="BinaryDataExplorer.GoToWindow"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  xmlns:local="clr-namespace:BinaryDataExplorer"
+                  xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+                  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                  mc:Ignorable="d"
+                  Title="Go To"
+                  ResizeMode="NoResize"
+                  SizeToContent="WidthAndHeight" MinHeight="0"
+                  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                  Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
+                  CloseWithEscape="True" 
+                  d:DataContext="{d:DesignInstance local:GoToViewModel}">
+
+    <Grid Margin="15">
+
+        <Grid.ColumnDefinitions>
+
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+
+        </Grid.ColumnDefinitions>
+
+        <metro:NumericUpDown Grid.Column="0"
+                             Width="80"
+                             metro:TextBoxHelper.Watermark="Address"
+                             ToolTip="Address"
+                             TextAlignment="Left"
+                             Margin="{StaticResource Thickness.HorizontalNormal}"
+                             Minimum="0"
+                             HideUpDownButtons="True"
+                             Value="{Binding Path=Address}" />
+
+        <ComboBox Grid.Column="1"
+                  Width="200"
+                  ToolTip="File"
+                  Margin="{StaticResource Thickness.HorizontalNormal}"
+                  ItemsSource="{Binding Path=Files, Mode=OneTime}"
+                  SelectedItem="{Binding Path=File}" />
+
+        <Button Grid.Column="2"
+                Click="NavigateButton_OnClick"
+                ToolTip="Navigate To"
+                Style="{StaticResource Styles.Button.FlatButton}">
+            <iconPacks:PackIconMaterial Kind="ArrowRightCircleOutline"
+                                        Background="Transparent"
+                                        VerticalAlignment="Center"/>
+        </Button>
+
+    </Grid>
+
+</local:BaseWindow>

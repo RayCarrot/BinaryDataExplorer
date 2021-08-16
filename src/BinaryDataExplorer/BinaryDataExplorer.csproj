@@ -1,0 +1,73 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- General -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <LangVersion>9</LangVersion>
+    <!-- <ApplicationIcon></ApplicationIcon> -->
+    <Version>0.1.0.0</Version>
+    <Authors>RayCarrot</Authors>
+    <Product>Binary Data Explorer</Product>
+    <PackageProjectUrl>https://github.com/RayCarrot/BinaryDataExplorer</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/RayCarrot/BinaryDataExplorer</RepositoryUrl>
+  </PropertyGroup>
+
+  <!-- Package references -->
+  <ItemGroup>
+    <!-- For item drag-drop -->
+    <PackageReference Include="gong-wpf-dragdrop" Version="2.3.2" />
+
+    <!-- Theme -->
+    <PackageReference Include="MahApps.Metro" Version="2.4.7" />
+    <PackageReference Include="MahApps.Metro.IconPacks.Material" Version="4.8.0" />
+
+    <!-- Required for full folder selection dialog -->
+    <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.4" />
+
+    <!-- For JSON serialization (used to store app user data) -->
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Nito.AsyncEx" Version="5.1.0" />
+
+    <!-- For automatically invoking PropertyChanged for modified properties -->
+    <PackageReference Include="PropertyChanged.Fody" Version="3.3.3" />
+    <PackageReference Include="System.Linq.Async" Version="5.0.0" />
+  </ItemGroup>
+
+  <!-- Project references -->
+  <ItemGroup>
+    <!-- Binary serializer -->
+    <ProjectReference Include="..\..\..\BinarySerializer\src\BinarySerializer.csproj" />
+    <ProjectReference Include="..\..\..\BinarySerializer.Image\src\BinarySerializer.Image.csproj" />
+    <ProjectReference Include="..\..\..\BinarySerializer.PS1\src\BinarySerializer.PS1.csproj" />
+    <ProjectReference Include="..\..\..\BinarySerializer.GBA\src\BinarySerializer.GBA.csproj" />
+    <ProjectReference Include="..\..\..\BinarySerializer.Ray1\src\BinarySerializer.Ray1.csproj" />
+    <ProjectReference Include="..\..\..\BinarySerializer.Klonoa\src\BinarySerializer.Klonoa.csproj" />
+
+    <!-- RayCarrot libraries -->
+    <ProjectReference Include="..\..\..\..\RayCarrot.UI\RayCarrot.UI\RayCarrot.UI.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="UI\Views\LoadProfileWindow\LoadProfileWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <!-- WPF XAML -->
+  <ItemGroup>
+    <Page Update="UI\Views\GoToWindow\GoToWindow.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UI\Views\LoadProfileWindow\LoadProfileWindow.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UI\Views\MainWindow\MainWindow.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
+</Project>

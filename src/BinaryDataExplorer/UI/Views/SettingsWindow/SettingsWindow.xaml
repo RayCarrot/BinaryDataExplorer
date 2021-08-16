@@ -1,0 +1,69 @@
+﻿<local:BaseWindow x:Class="BinaryDataExplorer.SettingsWindow"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  xmlns:local="clr-namespace:BinaryDataExplorer"
+                  xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+                  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                  mc:Ignorable="d"
+                  Title="Settings"
+                  ResizeMode="NoResize"
+                  Width="360"
+                  SizeToContent="Height"
+                  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                  Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
+                  CloseWithEscape="True" 
+                  d:DataContext="{d:DesignInstance local:SettingsViewModel}">
+    <StackPanel Margin="10">
+
+        <!-- Design -->
+
+        <TextBlock Style="{StaticResource Styles.TextBlock.Header}"
+                   Margin="{StaticResource Thickness.VerticalNormal}"
+                   Text="Design" />
+
+        <CheckBox Margin="{StaticResource Thickness.VerticalNormal}"
+                  Content="Sync theme"
+                  ToolTip="Syncs the app theme with the Windows theme."
+                  IsChecked="{Binding Path=Data.Theme_Sync}" />
+
+        <metro:ToggleSwitch Margin="{StaticResource Thickness.VerticalLarge}"
+                            IsOn="{Binding Path=Data.Theme_Dark}"
+                            IsEnabled="{Binding Path=Data.Theme_Sync, Converter={local:InvertedBooleanConverter}}"
+                            HorizontalAlignment="Left"
+                            OnContent="Dark"
+                            OffContent="Light" />
+
+        <!-- Serializer -->
+
+        <TextBlock Style="{StaticResource Styles.TextBlock.Header}"
+                   Margin="{StaticResource Thickness.VerticalNormal}"
+                   Text="Editor" />
+
+        <Grid Margin="{StaticResource Thickness.VerticalLarge}">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="7" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <CheckBox Grid.Column="0"
+                      Content="Serializer log"
+                      ToolTip="Indicates if the binary serializer logging should be enabled, logging any read/write operations. Having this be enabled will slow down the loading and saving in the editor."
+                      IsChecked="{Binding Path=Data.Serializer_EnableLog}" />
+
+            <Button Grid.Column="2"
+                    ToolTip="Open log file"
+                    Command="{Binding Path=OpenSerializerLogCommand, Mode=OneTime}"
+                    VerticalAlignment="Center"
+                    Style="{StaticResource Styles.Button.FlatButton}">
+                <iconPacks:PackIconMaterial Kind="Launch" Background="Transparent" />
+            </Button>
+
+        </Grid>
+
+    </StackPanel>
+
+</local:BaseWindow>
