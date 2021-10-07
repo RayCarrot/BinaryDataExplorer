@@ -12,9 +12,9 @@ namespace BinaryDataExplorer
 
         public override IEnumerable<IDataManager.DefaultFile> GetDefaultFiles(object mode)
         {
-            var config = (LoaderConfiguration_LV)mode;
+            var settings = (KlonoaSettings_LV)mode;
 
-            yield return new IDataManager.DefaultFile(config.FilePath_HEAD);
+            yield return new IDataManager.DefaultFile(settings.FilePath_HEAD);
 
             for (int i = 0; i < 3; i++)
             {
@@ -22,40 +22,43 @@ namespace BinaryDataExplorer
 
                 if (bin == Loader_LV.BINType.KL)
                 {
-                    for (int lang = 0; lang < config.LanguagesCount; lang++)
-                        yield return new IDataManager.DefaultFile(config.GetFilePath(bin, languageIndex: lang));
+                    for (int lang = 0; lang < settings.LanguagesCount; lang++)
+                        yield return new IDataManager.DefaultFile(settings.GetFilePath(bin, languageIndex: lang));
                 }
                 else
                 {
-                    yield return new IDataManager.DefaultFile(config.GetFilePath(bin));
+                    yield return new IDataManager.DefaultFile(settings.GetFilePath(bin));
                 }
             }
         }
 
         public override IEnumerable<IDataManager.DataManagerMode> GetModes() => new IDataManager.DataManagerMode[]
         {
-            new IDataManager.DataManagerMode("US", new LoaderConfiguration_LV_US(), "us"),
-            new IDataManager.DataManagerMode("EU", new LoaderConfiguration_LV_EU(), "eu"),
+            new IDataManager.DataManagerMode("US", new KlonoaSettings_LV_US(), "us"),
+            new IDataManager.DataManagerMode("EU", new KlonoaSettings_LV_EU(), "eu"),
         };
 
         public override async IAsyncEnumerable<BinaryData_FileViewModel> LoadAsync(Context context, object mode, IDataManager.ProfileFile[] files)
         {
             await Task.CompletedTask;
 
-            // Get the config
-            LoaderConfiguration_LV config = (LoaderConfiguration_LV)mode;
+            // Get the settings
+            KlonoaSettings_LV settings = (KlonoaSettings_LV)mode;
+
+            // Add the settings to the context
+            context.AddKlonoaSettings(settings);
 
             // Load the IDX
-            HeadPack_ArchiveFile headPack = FileFactory.Read<HeadPack_ArchiveFile>(config.FilePath_HEAD, context, (_, head) => head.Pre_HasMultipleLanguages = config.HasMultipleLanguages);
+            HeadPack_ArchiveFile headPack = FileFactory.Read<HeadPack_ArchiveFile>(settings.FilePath_HEAD, context, (_, head) => head.Pre_HasMultipleLanguages = settings.HasMultipleLanguages);
 
             // Create the loader
-            var loader = Loader_LV.Create(context, headPack, config);
+            var loader = Loader_LV.Create(context, headPack);
 
-            for (int lang = 0; lang < config.LanguagesCount; lang++)
+            for (int lang = 0; lang < settings.LanguagesCount; lang++)
             {
                 var languageIndex = lang;
 
-                yield return new BinaryData_FileViewModel(new BinaryData_File(config.LanguagesCount > 1 ? $"KL{lang + 1}" : "KL", null)
+                yield return new BinaryData_FileViewModel(new BinaryData_File(settings.LanguagesCount > 1 ? $"KL{lang + 1}" : "KL", null)
                 {
                     HasFiles = true,
                     GetFilesFunc = () => GetBINFilesAsync(loader, Loader_LV.BINType.KL, languageIndex: languageIndex),

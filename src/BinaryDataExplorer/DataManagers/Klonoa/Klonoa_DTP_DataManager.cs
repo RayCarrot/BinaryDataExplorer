@@ -13,7 +13,7 @@ namespace BinaryDataExplorer
 
         public override IEnumerable<IDataManager.DefaultFile> GetDefaultFiles(object mode)
         {
-            var config = (LoaderConfiguration_DTP)mode;
+            var config = (KlonoaSettings_DTP)mode;
 
             return new IDataManager.DefaultFile[]
             {
@@ -24,20 +24,23 @@ namespace BinaryDataExplorer
 
         public override IEnumerable<IDataManager.DataManagerMode> GetModes() => new IDataManager.DataManagerMode[]
         {
-            new IDataManager.DataManagerMode("US", new LoaderConfiguration_DTP_US(), "us"),
-            new IDataManager.DataManagerMode("Prototype (1997/07/17)", new LoaderConfiguration_DTP_Prototype_19970717(), "proto_19970717"),
+            new IDataManager.DataManagerMode("US", new KlonoaSettings_DTP_US(), "us"),
+            new IDataManager.DataManagerMode("Prototype (1997/07/17)", new KlonoaSettings_DTP_Prototype_19970717(), "proto_19970717"),
         };
 
         public override IAsyncEnumerable<BinaryData_FileViewModel> LoadAsync(Context context, object mode, IDataManager.ProfileFile[] files)
         {
-            // Get the config
-            LoaderConfiguration_DTP config = (LoaderConfiguration_DTP)mode;
+            // Get the settings
+            KlonoaSettings_DTP settings = (KlonoaSettings_DTP)mode;
+
+            // Add the settings to the context
+            context.AddKlonoaSettings(settings);
 
             // Load the IDX
-            IDX idxData = FileFactory.Read<IDX>(config.FilePath_IDX, context, (_, idx) => idx.Pre_LoaderConfig = config);
+            IDX idxData = FileFactory.Read<IDX>(settings.FilePath_IDX, context);
 
             // Create the loader
-            var loader = Loader_DTP.Create(context, idxData, config);
+            var loader = Loader_DTP.Create(context, idxData);
 
             // Add the BIN file
             return new BinaryData_FileViewModel[]
