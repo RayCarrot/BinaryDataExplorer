@@ -87,7 +87,7 @@ namespace BinaryDataExplorer
                 BaseFile fileData;
 
                 if (bin == Loader_LV.BINType.KL)
-                    fileData = await Task.Run(() => loader.LoadBINFile<LevelPack_ArchiveFile>(bin, fileIndex));
+                    fileData = await Task.Run(() => loader.LoadBINFile(bin, fileIndex, languageIndex: languageIndex));
                 else
                     fileData = await Task.Run(() => loader.LoadBINFile<RawData_File>(bin, fileIndex));
 
