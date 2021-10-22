@@ -7,7 +7,7 @@ namespace BinaryDataExplorer
 {
     public class BinaryData_BitValueItemViewModel : BinaryData_BaseItemViewModel
     {
-        public BinaryData_BitValueItemViewModel(BinaryData_BaseItemViewModel parent, Pointer address, int offset, int count, Type valueType, string name, int value) 
+        public BinaryData_BitValueItemViewModel(BinaryData_BaseItemViewModel parent, Pointer address, int offset, int count, Type valueType, string name, long value) 
             : base(parent: parent, address: address, type: $"Int{count}", typeInfo: GetBitMask(offset, count, valueType), name: name, value: $"{value}") 
         { }
 

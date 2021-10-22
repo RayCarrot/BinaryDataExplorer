@@ -422,6 +422,20 @@ namespace BinaryDataExplorer
             ReadType<T>(default);
         }
 
+        public override void SerializeBitValues64<T>(Action<SerializeBits64> serializeFunc)
+        {
+            var offset = 0;
+
+            serializeFunc((v, length, name) =>
+            {
+                AddDataItem(new BinaryData_BitValueItemViewModel(CurrentDataItem, CurrentPointer, offset, length, typeof(T), name, v));
+                offset += length;
+                return v;
+            });
+
+            ReadType<T>(default);
+        }
+
         #endregion
 
         #region Protected Helpers
