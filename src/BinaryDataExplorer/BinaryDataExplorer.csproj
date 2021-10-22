@@ -41,9 +41,13 @@
     <ProjectReference Include="..\..\..\BinarySerializer\src\BinarySerializer.csproj" />
     <ProjectReference Include="..\..\..\BinarySerializer.Image\src\BinarySerializer.Image.csproj" />
     <ProjectReference Include="..\..\..\BinarySerializer.PS1\src\BinarySerializer.PS1.csproj" />
+    <ProjectReference Include="..\..\..\BinarySerializer.PS2\src\BinarySerializer.PS2.csproj" />
     <ProjectReference Include="..\..\..\BinarySerializer.GBA\src\BinarySerializer.GBA.csproj" />
     <ProjectReference Include="..\..\..\BinarySerializer.Ray1\src\BinarySerializer.Ray1.csproj" />
-    <ProjectReference Include="..\..\..\BinarySerializer.Klonoa\src\BinarySerializer.Klonoa.csproj" />
+    <ProjectReference Include="..\..\..\BinarySerializer.Klonoa\src\BinarySerializer.Klonoa\BinarySerializer.Klonoa.csproj" />
+    <ProjectReference Include="..\..\..\BinarySerializer.Klonoa\src\BinarySerializer.Klonoa.DTP\BinarySerializer.Klonoa.DTP.csproj" />
+    <ProjectReference Include="..\..\..\BinarySerializer.Klonoa\src\BinarySerializer.Klonoa.LV\BinarySerializer.Klonoa.LV.csproj" />
+    <ProjectReference Include="..\..\..\BinarySerializer.Klonoa\src\BinarySerializer.Klonoa.KH\BinarySerializer.Klonoa.KH.csproj" />
 
     <!-- RayCarrot libraries -->
     <ProjectReference Include="..\..\..\..\RayCarrot.UI\RayCarrot.UI\RayCarrot.UI.csproj" />

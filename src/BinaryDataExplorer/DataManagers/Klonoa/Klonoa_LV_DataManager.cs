@@ -18,9 +18,9 @@ namespace BinaryDataExplorer
 
             for (int i = 0; i < 3; i++)
             {
-                var bin = (Loader_LV.BINType)i;
+                var bin = (Loader.BINType)i;
 
-                if (bin == Loader_LV.BINType.KL)
+                if (bin == Loader.BINType.KL)
                 {
                     for (int lang = 0; lang < settings.LanguagesCount; lang++)
                         yield return new IDataManager.DefaultFile(settings.GetFilePath(bin, languageIndex: lang));
@@ -52,7 +52,7 @@ namespace BinaryDataExplorer
             HeadPack_ArchiveFile headPack = FileFactory.Read<HeadPack_ArchiveFile>(settings.FilePath_HEAD, context, (_, head) => head.Pre_HasMultipleLanguages = settings.HasMultipleLanguages);
 
             // Create the loader
-            var loader = Loader_LV.Create(context, headPack);
+            var loader = Loader.Create(context, headPack);
 
             for (int lang = 0; lang < settings.LanguagesCount; lang++)
             {
@@ -61,7 +61,7 @@ namespace BinaryDataExplorer
                 yield return new BinaryData_FileViewModel(new BinaryData_File(settings.LanguagesCount > 1 ? $"KL{lang + 1}" : "KL", null)
                 {
                     HasFiles = true,
-                    GetFilesFunc = () => GetBINFilesAsync(loader, Loader_LV.BINType.KL, languageIndex: languageIndex),
+                    GetFilesFunc = () => GetBINFilesAsync(loader, Loader.BINType.KL, languageIndex: languageIndex),
                 });
             }
 
@@ -74,11 +74,11 @@ namespace BinaryDataExplorer
             yield return new BinaryData_FileViewModel(new BinaryData_File($"PPT", null)
             {
                 HasFiles = true,
-                GetFilesFunc = () => GetBINFilesAsync(loader, Loader_LV.BINType.PPT),
+                GetFilesFunc = () => GetBINFilesAsync(loader, Loader.BINType.PPT),
             });
         }
 
-        public async IAsyncEnumerable<BinaryData_File> GetBINFilesAsync(Loader_LV loader, Loader_LV.BINType bin, int languageIndex = 0)
+        public async IAsyncEnumerable<BinaryData_File> GetBINFilesAsync(Loader loader, Loader.BINType bin, int languageIndex = 0)
         {
             // Add every BIN file
             for (int fileIndex = 0; fileIndex < loader.GetBINHeader(bin, languageIndex).FilesCount; fileIndex++)
@@ -86,7 +86,7 @@ namespace BinaryDataExplorer
                 // Load the BIN file
                 BaseFile fileData;
 
-                if (bin == Loader_LV.BINType.KL)
+                if (bin == Loader.BINType.KL)
                     fileData = await Task.Run(() => loader.LoadBINFile(bin, fileIndex, languageIndex: languageIndex));
                 else
                     fileData = await Task.Run(() => loader.LoadBINFile<RawData_File>(bin, fileIndex));
@@ -102,7 +102,7 @@ namespace BinaryDataExplorer
             }
         }
 
-        public async IAsyncEnumerable<BinaryData_File> GetBINFiles_BGM_Async(Loader_LV loader)
+        public async IAsyncEnumerable<BinaryData_File> GetBINFiles_BGM_Async(Loader loader)
         {
             await Task.CompletedTask;
 
@@ -124,14 +124,14 @@ namespace BinaryDataExplorer
             }
         }
 
-        public async IAsyncEnumerable<BinaryData_File> GetBGMFiles(Loader_LV loader, int fileIndex)
+        public async IAsyncEnumerable<BinaryData_File> GetBGMFiles(Loader loader, int fileIndex)
         {
             var bgmFile = loader.GetBINHeader_BGM().FileDescriptors[fileIndex];
 
             for (int bgmIndex = 0; bgmIndex < bgmFile.FilesCount; bgmIndex++)
             {
                 // Load the BGM file
-                BaseFile fileData = await Task.Run(() => loader.LoadBINFile<RawData_File>(Loader_LV.BINType.BGM, fileIndex, bgmIndex: bgmIndex));
+                BaseFile fileData = await Task.Run(() => loader.LoadBINFile<RawData_File>(Loader.BINType.BGM, fileIndex, bgmIndex: bgmIndex));
 
                 var fileObj = new BinaryData_File($"{bgmIndex}", fileData)
                 {

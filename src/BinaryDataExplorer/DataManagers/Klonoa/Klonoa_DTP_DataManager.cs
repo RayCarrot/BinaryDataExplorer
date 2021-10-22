@@ -40,7 +40,7 @@ namespace BinaryDataExplorer
             IDX idxData = FileFactory.Read<IDX>(settings.FilePath_IDX, context);
 
             // Create the loader
-            var loader = Loader_DTP.Create(context, idxData);
+            var loader = Loader.Create(context, idxData);
 
             // Add the BIN file
             return new BinaryData_FileViewModel[]
@@ -53,7 +53,7 @@ namespace BinaryDataExplorer
             }.ToAsyncEnumerable();
         }
 
-        public async IAsyncEnumerable<BinaryData_File> GetBINBlocksAsync(Loader_DTP loader, IDX idxData)
+        public async IAsyncEnumerable<BinaryData_File> GetBINBlocksAsync(Loader loader, IDX idxData)
         {
             await Task.CompletedTask;
 
@@ -70,7 +70,7 @@ namespace BinaryDataExplorer
             }
         }
 
-        public async IAsyncEnumerable<BinaryData_File> GetBINBlockFilesAsync(Loader_DTP loader, IDX idxData, int blockIndex)
+        public async IAsyncEnumerable<BinaryData_File> GetBINBlockFilesAsync(Loader loader, IDX idxData, int blockIndex)
         {
             // Switch to the BIN block
             loader.SwitchBlocks(blockIndex);
