@@ -75,6 +75,7 @@ namespace BinaryDataExplorer
                 new Ray1_PC_DataManager(),
                 new Klonoa_DTP_DataManager(),
                 new Klonoa_LV_DataManager(),
+                new Klonoa_KH_DataManager(),
                 new PS1_DataManager(),
                 new GBA_DataManager(),
                 new Image_DataManager(),
