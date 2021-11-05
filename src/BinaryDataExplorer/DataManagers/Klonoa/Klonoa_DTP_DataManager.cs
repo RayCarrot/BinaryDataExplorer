@@ -19,6 +19,7 @@ namespace BinaryDataExplorer
             {
                 new IDataManager.DefaultFile(config.FilePath_BIN),
                 new IDataManager.DefaultFile(config.FilePath_IDX, config.Address_IDX),
+                new IDataManager.DefaultFile(config.FilePath_EXE, config.Address_EXE, MemoryMappedPriority: 0), // Give lower prio to prioritize IDX
             };
         }
 
@@ -79,14 +80,18 @@ namespace BinaryDataExplorer
             for (int fileIndex = 0; fileIndex < idxData.Entries[blockIndex].LoadCommands.Length; fileIndex++)
             {
                 // Get the load command
-                var loadCmd = idxData.Entries[blockIndex].LoadCommands[fileIndex];
+                IDXLoadCommand loadCmd = idxData.Entries[blockIndex].LoadCommands[fileIndex];
 
                 // Ignore any command which does not load a file
                 if (loadCmd.Type != 2)
                     continue;
 
                 // Load the BIN block file
-                var fileData = await Task.Run(() => loader.LoadBINFile(fileIndex));
+                BaseFile fileData = await Task.Run(() => loader.LoadBINFile(fileIndex));
+
+                // Process code files
+                if (loadCmd.FILE_Type == IDXLoadCommand.FileType.Code)
+                    loader.ProcessBINFile(fileIndex);
 
                 var fileObj = new BinaryData_File($"{fileIndex} ({loadCmd.FILE_Type})", fileData)
                 {
@@ -98,6 +103,15 @@ namespace BinaryDataExplorer
 
                 yield return fileObj;
             }
+
+            // Load the code data for each sector
+            for (int i = 0; i < (loader.LevelPack?.Sectors.Length ?? 0); i++)
+            {
+                loader.LevelSector = i;
+                loader.ProcessLevelData();
+            }
+
+            loader.LevelSector = -1;
         }
     }
 }
