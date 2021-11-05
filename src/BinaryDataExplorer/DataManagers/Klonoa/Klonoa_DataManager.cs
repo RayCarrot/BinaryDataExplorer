@@ -19,11 +19,11 @@ namespace BinaryDataExplorer
             {
                 var archiveFile = archive.ParsedFiles[i];
 
-                yield return new BinaryData_File($"{i} ({archiveFile.Item1?.GetType().Name}) - {archiveFile.Item2}", archiveFile.Item1)
+                yield return new BinaryData_File($"{i} ({archiveFile?.Obj.GetType().Name}) - {archiveFile?.Name}", archiveFile?.Obj)
                 {
-                    HasFiles = archiveFile.Item1 is ArchiveFile fileArchive && fileArchive.OffsetTable.FilesCount > 0,
-                    GetFilesFunc = () => GetArchiveFilesAsync(archiveFile.Item1),
-                    AutoRetrieveFileObjectDataItems = archiveFile.Item1 is { } and not ArchiveFile,
+                    HasFiles = archiveFile?.Obj is ArchiveFile fileArchive && fileArchive.OffsetTable.FilesCount > 0,
+                    GetFilesFunc = () => GetArchiveFilesAsync(archiveFile?.Obj),
+                    AutoRetrieveFileObjectDataItems = archiveFile?.Obj is { } and not ArchiveFile,
                 };
             }
         }
