@@ -104,14 +104,8 @@ namespace BinaryDataExplorer
                 yield return fileObj;
             }
 
-            // Load the code data for each sector
-            for (int i = 0; i < (loader.LevelPack?.Sectors.Length ?? 0); i++)
-            {
-                loader.LevelSector = i;
-                loader.ProcessLevelData();
-            }
-
-            loader.LevelSector = -1;
+            // Load the level code data
+            loader.ProcessLevelData();
         }
     }
 }
