@@ -51,6 +51,7 @@ namespace BinaryDataExplorer
                     {
                         FilePath = "NormalFile.bin",
                         Address = 0,
+                        MemoryMappedPriority = -1,
                         IsReadOnly = false,
                         FileType = null
                     },

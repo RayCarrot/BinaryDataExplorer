@@ -50,7 +50,7 @@ namespace BinaryDataExplorer
                     if (file.Address == 0)
                         Context.AddFile(new LinearFile(Context, file.FilePath));
                     else
-                        Context.AddFile(new MemoryMappedFile(Context, file.FilePath, file.Address));
+                        Context.AddFile(new MemoryMappedFile(Context, file.FilePath, file.Address, memoryMappedPriority: file.MemoryMappedPriority));
                 }
 
                 // Mark as initialized

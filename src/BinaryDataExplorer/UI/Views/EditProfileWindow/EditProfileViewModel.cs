@@ -31,6 +31,7 @@ namespace BinaryDataExplorer
             {
                 FilePath = x.FilePath,
                 Address = x.Address,
+                MemoryMappedPriority = x.MemoryMappedPriority,
                 FileType = x.FileType,
             }));
         }
@@ -128,7 +129,8 @@ namespace BinaryDataExplorer
                 Files.Add(new ProfileFileViewModel(this, SelectedManager, true)
                 {
                     FilePath = file.FilePath,
-                    Address = file.Address
+                    Address = file.Address,
+                    MemoryMappedPriority = file.MemoryMappedPriority,
                 });
             }
         }

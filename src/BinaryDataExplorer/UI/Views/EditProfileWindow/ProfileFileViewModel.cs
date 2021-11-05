@@ -29,6 +29,7 @@ namespace BinaryDataExplorer
         public bool IsReadOnly { get; }
         public string FilePath { get; set; }
         public long Address { get; set; }
+        public long MemoryMappedPriority { get; set; } = -1;
         public IDataManager.FileType SelectedFileType { get; set; }
         public string FileType
         {

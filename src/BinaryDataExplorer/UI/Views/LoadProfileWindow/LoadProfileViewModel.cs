@@ -88,6 +88,7 @@ namespace BinaryDataExplorer
             {
                 FilePath = x.FilePath,
                 Address = x.Address,
+                MemoryMappedPriority = x.MemoryMappedPriority,
                 IsReadOnly = x.IsReadOnly,
                 FileType = x.FileType
             }).ToArray();
