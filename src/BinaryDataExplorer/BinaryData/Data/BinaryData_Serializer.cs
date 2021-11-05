@@ -408,6 +408,27 @@ namespace BinaryDataExplorer
 
         public override void DoEndian(Endian endianness, Action action) => action();
 
+        public override void SerializeBitValues(Action<SerializeBits64> serializeFunc)
+        {
+            int offset = 0;
+
+            var items = new List<(long value, int length, string name, int offset)>();
+
+            serializeFunc((v, length, name) =>
+            {
+                items.Add((v, length, name, offset));
+                offset += length;
+                return v;
+            });
+
+            var bytesCount = (int)Math.Ceiling(offset / 8f);
+
+            foreach (var item in items)
+                AddDataItem(new BinaryData_BitValueItemViewModel(CurrentDataItem, CurrentPointer, item.offset, item.length, bytesCount * 8, item.name, item.value));
+
+            CurrentFilePosition += bytesCount;
+        }
+
         public override void SerializeBitValues<T>(Action<SerializeBits> serializeFunc)
         {
             var offset = 0;
