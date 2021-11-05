@@ -17,7 +17,14 @@ namespace BinaryDataExplorer
             // Add every archive file
             for (var i = 0; i < archive.ParsedFiles.Length; i++)
             {
-                var archiveFile = archive.ParsedFiles[i];
+                ArchiveFile.ParsedFile archiveFile = archive.ParsedFiles[i];
+
+                // Parse as raw data if not already parsed
+                if (archiveFile == null)
+                {
+                    archive.SerializeFile<RawData_File>(fileData.Context.Deserializer, default, i, name: $"UnparsedFile[{i}]");
+                    archiveFile = archive.ParsedFiles[i];
+                }
 
                 yield return new BinaryData_File($"{i} ({archiveFile?.Obj.GetType().Name}) - {archiveFile?.Name}", archiveFile?.Obj)
                 {
