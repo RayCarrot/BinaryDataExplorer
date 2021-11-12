@@ -104,8 +104,24 @@ namespace BinaryDataExplorer
                 yield return fileObj;
             }
 
-            // Load the level code data
-            loader.ProcessLevelData();
+            if (loader.BINBlock >= loader.Settings.BLOCK_FirstLevel)
+            {
+                // Load the level code data
+                loader.ProcessLevelData();
+
+                // Load the hard-coded objects data
+                if (loader.LevelPack?.Sectors != null)
+                {
+                    for (int sectorIndex = 0; sectorIndex < loader.LevelPack.Sectors.Length; sectorIndex++)
+                    {
+                        loader.LevelSector = sectorIndex;
+                        BaseHardCodedObjectsLoader objLoader = loader.Settings.GetHardCodedObjectsLoader(loader);
+                        objLoader.LoadObjects();
+                    }
+
+                    loader.LevelSector = -1;
+                }
+            }
         }
     }
 }
