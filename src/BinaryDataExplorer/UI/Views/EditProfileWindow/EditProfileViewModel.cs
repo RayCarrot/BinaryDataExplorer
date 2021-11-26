@@ -5,7 +5,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using Microsoft.WindowsAPICodePack.Dialogs;
-using RayCarrot.UI;
 
 namespace BinaryDataExplorer;
 

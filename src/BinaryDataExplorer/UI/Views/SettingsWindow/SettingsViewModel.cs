@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Windows;
 using System.Windows.Input;
-using RayCarrot.UI;
 
 namespace BinaryDataExplorer;
 

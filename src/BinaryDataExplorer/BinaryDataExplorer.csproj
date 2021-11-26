@@ -48,9 +48,6 @@
     <ProjectReference Include="..\..\..\BinarySerializer.Klonoa\src\BinarySerializer.Klonoa.DTP\BinarySerializer.Klonoa.DTP.csproj" />
     <ProjectReference Include="..\..\..\BinarySerializer.Klonoa\src\BinarySerializer.Klonoa.LV\BinarySerializer.Klonoa.LV.csproj" />
     <ProjectReference Include="..\..\..\BinarySerializer.Klonoa\src\BinarySerializer.Klonoa.KH\BinarySerializer.Klonoa.KH.csproj" />
-
-    <!-- RayCarrot libraries -->
-    <ProjectReference Include="..\..\..\..\RayCarrot.UI\RayCarrot.UI\RayCarrot.UI.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="UI\Views\LoadProfileWindow\LoadProfileWindow.xaml.cs">

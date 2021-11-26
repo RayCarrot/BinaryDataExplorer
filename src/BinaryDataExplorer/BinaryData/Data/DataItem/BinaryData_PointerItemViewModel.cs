@@ -1,6 +1,5 @@
 ﻿using System.Windows.Input;
 using BinarySerializer;
-using RayCarrot.UI;
 
 namespace BinaryDataExplorer;
 

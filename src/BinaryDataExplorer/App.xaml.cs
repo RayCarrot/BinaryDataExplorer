@@ -2,7 +2,6 @@
 using System.Windows;
 using System.Windows.Threading;
 using ControlzEx.Theming;
-using RayCarrot.UI;
 
 namespace BinaryDataExplorer;
 
