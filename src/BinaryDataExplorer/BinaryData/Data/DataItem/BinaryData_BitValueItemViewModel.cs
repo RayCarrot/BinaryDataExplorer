@@ -18,7 +18,7 @@ namespace BinaryDataExplorer
             : base(
                 parent: parent, 
                 address: address, 
-                type: $"{position}_{length} {valueType.Name}", 
+                type: $"{position}_{length} {valueType.GetFriendlyName()}", 
                 typeInfo: GetBitMask(position, length, valueSize), 
                 name: name, 
                 value: $"{value}") 

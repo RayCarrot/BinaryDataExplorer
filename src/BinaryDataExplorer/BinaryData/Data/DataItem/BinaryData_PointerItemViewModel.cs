@@ -7,7 +7,7 @@ namespace BinaryDataExplorer
     public class BinaryData_PointerItemViewModel : BinaryData_BaseItemViewModel
     {
         public BinaryData_PointerItemViewModel(BinaryData_BaseItemViewModel parent, Pointer address, string name, Pointer value) 
-            : base(parent: parent, address: address, type: typeof(Pointer).Name, typeInfo: typeof(Pointer).FullName, name: name, value: value?.ToString())
+            : base(parent: parent, address: address, type: typeof(Pointer).GetFriendlyName(), typeInfo: typeof(Pointer).FullName, name: name, value: value?.ToString())
         {
             PointerValue = value;
 

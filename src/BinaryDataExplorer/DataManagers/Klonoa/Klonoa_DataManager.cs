@@ -26,7 +26,7 @@ namespace BinaryDataExplorer
                     archiveFile = archive.ParsedFiles[i];
                 }
 
-                yield return new BinaryData_File($"{i} ({archiveFile?.Obj.GetType().Name}) - {archiveFile?.Name}", archiveFile?.Obj)
+                yield return new BinaryData_File($"{i} ({archiveFile?.Obj.GetType().GetFriendlyName()}) - {archiveFile?.Name}", archiveFile?.Obj)
                 {
                     HasFiles = archiveFile?.Obj is ArchiveFile fileArchive && fileArchive.OffsetTable.FilesCount > 0,
                     GetFilesFunc = () => GetArchiveFilesAsync(archiveFile?.Obj),
