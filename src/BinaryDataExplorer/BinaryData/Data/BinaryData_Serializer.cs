@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace BinaryDataExplorer
@@ -51,9 +52,9 @@ namespace BinaryDataExplorer
 
         #region Data
 
-        protected BinaryData_BaseItemViewModel CurrentDataItem { get; set; }
+        public BinaryData_BaseItemViewModel CurrentDataItem { get; set; }
 
-        protected BinaryData_BaseItemViewModel AddDataItem(BinaryData_BaseItemViewModel dataItem)
+        public BinaryData_BaseItemViewModel AddDataItem(BinaryData_BaseItemViewModel dataItem)
         {
             CurrentDataItem.AddDataItem(dataItem);
             return dataItem;
@@ -424,35 +425,14 @@ namespace BinaryDataExplorer
             var bytesCount = (int)Math.Ceiling(offset / 8f);
 
             foreach (var item in items)
-                AddDataItem(new BinaryData_BitValueItemViewModel(CurrentDataItem, CurrentPointer, item.offset, item.length, bytesCount * 8, item.name, item.value));
+                AddDataItem(new BinaryData_BitValueItemViewModel(CurrentDataItem, CurrentPointer, item.offset, item.length, bytesCount * 8, item.name, item.value, typeof(long)));
 
             CurrentFilePosition += bytesCount;
         }
 
-        public override void SerializeBitValues<T>(Action<SerializeBits> serializeFunc)
+        public override void DoBits<T>(Action<BitSerializerObject> serializeFunc)
         {
-            var offset = 0;
-
-            serializeFunc((v, length, name) => 
-            {
-                AddDataItem(new BinaryData_BitValueItemViewModel(CurrentDataItem, CurrentPointer, offset, length, typeof(T), name, v));
-                offset += length;
-                return v;
-            });
-
-            ReadType<T>(default);
-        }
-
-        public override void SerializeBitValues64<T>(Action<SerializeBits64> serializeFunc)
-        {
-            var offset = 0;
-
-            serializeFunc((v, length, name) =>
-            {
-                AddDataItem(new BinaryData_BitValueItemViewModel(CurrentDataItem, CurrentPointer, offset, length, typeof(T), name, v));
-                offset += length;
-                return v;
-            });
+            serializeFunc(new BinaryData_BitSerializer(this, CurrentPointer, Marshal.SizeOf(typeof(T)) * 8));
 
             ReadType<T>(default);
         }
