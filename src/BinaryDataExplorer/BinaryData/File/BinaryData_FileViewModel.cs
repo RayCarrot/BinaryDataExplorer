@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace BinaryDataExplorer;
 
@@ -98,8 +100,16 @@ public class BinaryData_FileViewModel : BaseViewModel
         {
             Files.Clear();
 
-            await foreach (var childFile in FileData.GetFilesAsync())
-                Files.Add(new BinaryData_FileViewModel(childFile));
+            try
+            {
+                await foreach (BinaryData_File childFile in FileData.GetFilesAsync())
+                    Files.Add(new BinaryData_FileViewModel(childFile));
+            }
+            catch (Exception ex)
+            {
+                // TODO: Move to UI manager
+                MessageBox.Show($"An error occurred when loading the files. Error message: {ex.Message}");
+            }
         }, returnIfLoading: false);
     }
 }
