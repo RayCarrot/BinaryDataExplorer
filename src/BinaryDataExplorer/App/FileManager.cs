@@ -1,56 +1,55 @@
 ﻿using System.Diagnostics;
 using System.IO;
 
-namespace BinaryDataExplorer
+namespace BinaryDataExplorer;
+
+public class FileManager
 {
-    public class FileManager
+    // TODO: Error handling
+
+    public void OpenURL(string url)
     {
-        // TODO: Error handling
-
-        public void OpenURL(string url)
+        url = url.Replace("&", "^&");
+        Process.Start(new ProcessStartInfo("cmd", $"/c start {url}")
         {
-            url = url.Replace("&", "^&");
-            Process.Start(new ProcessStartInfo("cmd", $"/c start {url}")
-            {
-                CreateNoWindow = true
-            });
-        }
+            CreateNoWindow = true
+        });
+    }
 
-        public Process LaunchFile(string file, bool asAdmin = false, string arguments = null, string wd = null)
+    public Process LaunchFile(string file, bool asAdmin = false, string arguments = null, string wd = null)
+    {
+        // Create the process start info
+        ProcessStartInfo info = new ProcessStartInfo
         {
-            // Create the process start info
-            ProcessStartInfo info = new ProcessStartInfo
-            {
-                // Set the file path
-                FileName = file,
+            // Set the file path
+            FileName = file,
 
-                // Set to working directory to the parent directory if not otherwise specified
-                WorkingDirectory = wd ?? Path.GetDirectoryName(file),
+            // Set to working directory to the parent directory if not otherwise specified
+            WorkingDirectory = wd ?? Path.GetDirectoryName(file),
 
-                UseShellExecute = true
-            };
+            UseShellExecute = true
+        };
 
-            // Set arguments if specified
-            if (arguments != null)
-                info.Arguments = arguments;
+        // Set arguments if specified
+        if (arguments != null)
+            info.Arguments = arguments;
 
-            // Set to run as admin if specified
-            if (asAdmin)
-                info.Verb = "runas";
+        // Set to run as admin if specified
+        if (asAdmin)
+            info.Verb = "runas";
 
-            // Start the process and get the process
-            var p = Process.Start(info);
+        // Start the process and get the process
+        var p = Process.Start(info);
 
-            // Return the process
-            return p;
-        }
+        // Return the process
+        return p;
+    }
 
-        public void OpenExplorerPath(string path)
-        {
-            if (File.Exists(path))
-                Process.Start("explorer.exe", "/select, \"" + path + "\"")?.Dispose();
-            else if (Directory.Exists(path))
-                Process.Start("explorer.exe", path)?.Dispose();
-        }
+    public void OpenExplorerPath(string path)
+    {
+        if (File.Exists(path))
+            Process.Start("explorer.exe", "/select, \"" + path + "\"")?.Dispose();
+        else if (Directory.Exists(path))
+            Process.Start("explorer.exe", path)?.Dispose();
     }
 }

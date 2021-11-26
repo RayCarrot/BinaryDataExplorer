@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 
-namespace BinaryDataExplorer
+namespace BinaryDataExplorer;
+
+public static class EnumerableExtensions
 {
-    public static class EnumerableExtensions
+    public static IEnumerable<T> Yield<T>(this T item)
     {
-        public static IEnumerable<T> Yield<T>(this T item)
-        {
-            yield return item;
-        }
+        yield return item;
     }
 }

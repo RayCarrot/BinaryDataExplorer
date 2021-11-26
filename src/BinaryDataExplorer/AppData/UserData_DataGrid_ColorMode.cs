@@ -1,9 +1,8 @@
-﻿namespace BinaryDataExplorer
+﻿namespace BinaryDataExplorer;
+
+public enum UserData_DataGrid_ColorMode
 {
-    public enum UserData_DataGrid_ColorMode
-    {
-        Hide,
-        Show,
-        Show_IgnoreAlpha,
-    }
+    Hide,
+    Show,
+    Show_IgnoreAlpha,
 }

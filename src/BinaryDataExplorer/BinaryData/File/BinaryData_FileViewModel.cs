@@ -4,104 +4,103 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BinaryDataExplorer
+namespace BinaryDataExplorer;
+
+public class BinaryData_FileViewModel : BaseViewModel
 {
-    public class BinaryData_FileViewModel : BaseViewModel
+    public BinaryData_FileViewModel(BinaryData_File fileData)
     {
-        public BinaryData_FileViewModel(BinaryData_File fileData)
-        {
-            FileData = fileData;
-            DataItems = new FlattenedHierarchicalObservableCollection<BinaryData_BaseItemViewModel>();
-            Files = new ObservableCollection<BinaryData_FileViewModel>();
+        FileData = fileData;
+        DataItems = new FlattenedHierarchicalObservableCollection<BinaryData_BaseItemViewModel>();
+        Files = new ObservableCollection<BinaryData_FileViewModel>();
 
-            // Add dummy entry if it can be expanded so it can be expanded in the UI
-            if (FileData.HasFiles)
-                Files.Add(null);
+        // Add dummy entry if it can be expanded so it can be expanded in the UI
+        if (FileData.HasFiles)
+            Files.Add(null);
+    }
+
+    public string Header => FileData.Header;
+    public BinaryData_File FileData { get; }
+    public FlattenedHierarchicalObservableCollection<BinaryData_BaseItemViewModel> DataItems { get; }
+    public ObservableCollection<BinaryData_FileViewModel> Files { get; }
+
+    private bool? _isSelected;
+    public bool IsSelected
+    {
+        get => _isSelected ?? false;
+        set
+        {
+            if (_isSelected == null)
+                OnFirstSelected();    
+
+            _isSelected = value;
         }
+    }
 
-        public string Header => FileData.Header;
-        public BinaryData_File FileData { get; }
-        public FlattenedHierarchicalObservableCollection<BinaryData_BaseItemViewModel> DataItems { get; }
-        public ObservableCollection<BinaryData_FileViewModel> Files { get; }
-
-        private bool? _isSelected;
-        public bool IsSelected
+    private bool? _isExpanded;
+    public bool IsExpanded
+    {
+        get => _isExpanded ?? false;
+        set
         {
-            get => _isSelected ?? false;
-            set
+            if (_isExpanded == null)
             {
-                if (_isSelected == null)
-                    OnFirstSelected();    
-
-                _isSelected = value;
-            }
-        }
-
-        private bool? _isExpanded;
-        public bool IsExpanded
-        {
-            get => _isExpanded ?? false;
-            set
-            {
-                if (_isExpanded == null)
-                {
-                    _isExpanded = value;
-                    OnFirstExpanded();
-                    return;
-                }
-
                 _isExpanded = value;
+                OnFirstExpanded();
+                return;
             }
+
+            _isExpanded = value;
         }
+    }
 
-        protected async void OnFirstSelected() => await InitializeDataItemsAsync();
-        protected async void OnFirstExpanded() => await InitializeFilesAsync();
+    protected async void OnFirstSelected() => await InitializeDataItemsAsync();
+    protected async void OnFirstExpanded() => await InitializeFilesAsync();
 
-        public async Task InitializeDataItemsAsync()
+    public async Task InitializeDataItemsAsync()
+    {
+        // Add data
+        await Services.BinaryData.UseContextAsync(() =>
         {
-            // Add data
-            await Services.BinaryData.UseContextAsync(() =>
+            DataItems.Clear();
+            var dataTable = Services.BinaryData.DataLookupTable;
+
+            foreach (var dataItem in FileData.GetDataItems())
             {
-                DataItems.Clear();
-                var dataTable = Services.BinaryData.DataLookupTable;
+                var dataItemVM = new BinaryData_FlattenedHierarchialDataItemViewModel(DataItems, dataItem, this);
+                DataItems.AddData(dataItemVM);
+                setChildren(dataItemVM, dataItem.DataItems);
 
-                foreach (var dataItem in FileData.GetDataItems())
+                if (dataItem.Address != null)
+                    dataTable[dataItem.Address] = dataItemVM;
+
+                void setChildren(FlattenedHierarchicalDataItemViewModel<BinaryData_BaseItemViewModel> vm, IEnumerable<BinaryData_BaseItemViewModel> dataItems)
                 {
-                    var dataItemVM = new BinaryData_FlattenedHierarchialDataItemViewModel(DataItems, dataItem, this);
-                    DataItems.AddData(dataItemVM);
-                    setChildren(dataItemVM, dataItem.DataItems);
-
-                    if (dataItem.Address != null)
-                        dataTable[dataItem.Address] = dataItemVM;
-
-                    void setChildren(FlattenedHierarchicalDataItemViewModel<BinaryData_BaseItemViewModel> vm, IEnumerable<BinaryData_BaseItemViewModel> dataItems)
+                    foreach (var item in dataItems)
                     {
-                        foreach (var item in dataItems)
-                        {
-                            var childVM = vm.AddChild(item);
-                            setChildren(childVM, item.DataItems);
-                            if (item.Address != null)
-                                dataTable[item.Address] = childVM;
-                        }
+                        var childVM = vm.AddChild(item);
+                        setChildren(childVM, item.DataItems);
+                        if (item.Address != null)
+                            dataTable[item.Address] = childVM;
                     }
                 }
-            }, returnIfLoading: false);
+            }
+        }, returnIfLoading: false);
 
-            // Initialize the data
-            DataItems.Initialize();
+        // Initialize the data
+        DataItems.Initialize();
 
-            foreach (var item in DataItems.ToArray())
-                item.IsExpanded = true;
-        }
-        public async Task InitializeFilesAsync()
+        foreach (var item in DataItems.ToArray())
+            item.IsExpanded = true;
+    }
+    public async Task InitializeFilesAsync()
+    {
+        await Services.BinaryData.UseContextAsync(async () =>
         {
-            await Services.BinaryData.UseContextAsync(async () =>
-            {
-                Files.Clear();
+            Files.Clear();
 
-                await foreach (var childFile in FileData.GetFilesAsync())
-                    Files.Add(new BinaryData_FileViewModel(childFile));
-            }, returnIfLoading: false);
-        }
+            await foreach (var childFile in FileData.GetFilesAsync())
+                Files.Add(new BinaryData_FileViewModel(childFile));
+        }, returnIfLoading: false);
     }
 }
