@@ -61,7 +61,7 @@ public class Klonoa_LV_DataManager : Klonoa_DataManager
             yield return new BinaryData_FileViewModel(new BinaryData_File(settings.LanguagesCount > 1 ? $"KL{lang + 1}" : "KL", null)
             {
                 HasFiles = true,
-                GetFilesFunc = () => GetBINFilesAsync(loader, Loader.BINType.KL, languageIndex: languageIndex),
+                GetFilesFunc = () => GetBINFiles_KL_Async(loader, languageIndex: languageIndex),
             });
         }
 
@@ -74,32 +74,36 @@ public class Klonoa_LV_DataManager : Klonoa_DataManager
         yield return new BinaryData_FileViewModel(new BinaryData_File($"PPT", null)
         {
             HasFiles = true,
-            GetFilesFunc = () => GetBINFilesAsync(loader, Loader.BINType.PPT),
+            GetFilesFunc = () => GetBINFiles_PPT_Async(loader),
         });
     }
 
-    public async IAsyncEnumerable<BinaryData_File> GetBINFilesAsync(Loader loader, Loader.BINType bin, int languageIndex = 0)
+    public async IAsyncEnumerable<BinaryData_File> GetBINFiles_KL_Async(Loader loader, int languageIndex = 0)
     {
+        await Task.CompletedTask;
+
         // Add every BIN file
-        for (int fileIndex = 0; fileIndex < loader.GetBINHeader(bin, languageIndex).FilesCount; fileIndex++)
+        for (int fileIndex = 0; fileIndex < loader.GetBINHeader(Loader.BINType.KL, languageIndex).FilesCount; fileIndex++)
         {
-            // Load the BIN file
-            BaseFile fileData;
+            int index = fileIndex;
 
-            if (bin == Loader.BINType.KL)
-                fileData = await Task.Run(() => loader.LoadBINFile(bin, fileIndex, languageIndex: languageIndex));
-            else
-                fileData = await Task.Run(() => loader.LoadBINFile<RawData_File>(bin, fileIndex));
-
-            var fileObj = new BinaryData_File($"{fileIndex}", fileData)
+            BinaryData_File fileObj = new($"{fileIndex}", null)
             {
-                HasFiles = fileData is ArchiveFile archive && archive.OffsetTable.FilesCount > 0,
-                GetFilesFunc = () => GetArchiveFilesAsync(fileData),
-                AutoRetrieveFileObjectDataItems = fileData is { } and not ArchiveFile,
+                HasFiles = true,
+                GetFilesFunc = () => GetKLBINContent(loader, index, languageIndex),
             };
 
             yield return fileObj;
         }
+    }
+
+    public async IAsyncEnumerable<BinaryData_File> GetKLBINContent(Loader loader, int index, int languageIndex = 0)
+    {
+        // Load the file
+        BaseFile fileData = await Task.Run(() => loader.LoadBINFile(Loader.BINType.KL, index, languageIndex: languageIndex));
+
+        await foreach (var f in GetArchiveFilesAsync(fileData))
+            yield return f;
     }
 
     public async IAsyncEnumerable<BinaryData_File> GetBINFiles_BGM_Async(Loader loader)
@@ -126,14 +130,35 @@ public class Klonoa_LV_DataManager : Klonoa_DataManager
 
     public async IAsyncEnumerable<BinaryData_File> GetBGMFiles(Loader loader, int fileIndex)
     {
-        var bgmFile = loader.GetBINHeader_BGM().FileDescriptors[fileIndex];
+        BINHeader_BGMFileDescriptor bgmFile = loader.GetBINHeader_BGM().FileDescriptors[fileIndex];
 
         for (int bgmIndex = 0; bgmIndex < bgmFile.FilesCount; bgmIndex++)
         {
             // Load the BGM file
             BaseFile fileData = await Task.Run(() => loader.LoadBINFile<RawData_File>(Loader.BINType.BGM, fileIndex, bgmIndex: bgmIndex));
 
-            var fileObj = new BinaryData_File($"{bgmIndex}", fileData)
+            BinaryData_File fileObj = new($"{bgmIndex}", fileData)
+            {
+                HasFiles = fileData is ArchiveFile archive && archive.OffsetTable.FilesCount > 0,
+                GetFilesFunc = () => GetArchiveFilesAsync(fileData),
+                AutoRetrieveFileObjectDataItems = fileData is { } and not ArchiveFile,
+            };
+
+            yield return fileObj;
+        }
+    }
+
+    public async IAsyncEnumerable<BinaryData_File> GetBINFiles_PPT_Async(Loader loader)
+    {
+        await Task.CompletedTask;
+
+        // Add every BIN file
+        for (int fileIndex = 0; fileIndex < loader.GetBINHeader(Loader.BINType.PPT).FilesCount; fileIndex++)
+        {
+            // Load the BIN file
+            BaseFile fileData = await Task.Run(() => loader.LoadBINFile(Loader.BINType.PPT, fileIndex));
+
+            BinaryData_File fileObj = new($"{fileIndex}", fileData)
             {
                 HasFiles = fileData is ArchiveFile archive && archive.OffsetTable.FilesCount > 0,
                 GetFilesFunc = () => GetArchiveFilesAsync(fileData),
