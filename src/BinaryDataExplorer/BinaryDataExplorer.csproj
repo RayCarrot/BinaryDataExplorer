@@ -3,9 +3,9 @@
   <!-- General -->
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
-    <LangVersion>9</LangVersion>
+    <LangVersion>10</LangVersion>
     <!-- <ApplicationIcon></ApplicationIcon> -->
     <Version>0.1.0.0</Version>
     <Authors>RayCarrot</Authors>
