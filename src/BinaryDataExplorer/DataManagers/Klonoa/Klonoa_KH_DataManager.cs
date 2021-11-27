@@ -56,52 +56,63 @@ public class Klonoa_KH_DataManager : Klonoa_DataManager
     {
         await Task.CompletedTask;
 
+        // Menu pack
         yield return new BinaryData_File(nameof(rom.MenuPack), null)
         {
             HasFiles = true,
             GetFilesFunc = () => GetArchiveFilesAsync(rom.MenuPack)
         };
 
+        // Enemy animations pack
         yield return new BinaryData_File(nameof(rom.EnemyAnimationsPack), null)
         {
             HasFiles = true,
             GetFilesFunc = () => GetArchiveFilesAsync(rom.EnemyAnimationsPack)
         };
 
+        // Gameplay pack
         yield return new BinaryData_File(nameof(rom.GameplayPack), null)
         {
             HasFiles = true,
             GetFilesFunc = () => GetArchiveFilesAsync(rom.GameplayPack)
         };
 
+        // Items pack
         yield return new BinaryData_File(nameof(rom.ItemsPack), null)
         {
             HasFiles = true,
             GetFilesFunc = () => GetArchiveFilesAsync(rom.ItemsPack)
         };
 
+        // UI pack
         yield return new BinaryData_File(nameof(rom.UIPack), null)
         {
             HasFiles = true,
             GetFilesFunc = () => GetArchiveFilesAsync(rom.UIPack)
         };
 
+        // Story pack
         yield return new BinaryData_File(nameof(rom.StoryPack), null)
         {
             HasFiles = true,
             GetFilesFunc = () => GetArchiveFilesAsync(rom.StoryPack)
         };
 
+        // Maps pack
         yield return new BinaryData_File(nameof(rom.MapsPack), null)
         {
             HasFiles = true,
             GetFilesFunc = () => GetArchiveFilesAsync(rom.MapsPack)
         };
 
+        // World map pack
         yield return new BinaryData_File(nameof(rom.WorldMapPack), null)
         {
             HasFiles = true,
             GetFilesFunc = () => GetArchiveFilesAsync(rom.WorldMapPack)
         };
+
+        // Enemy object definitions
+        yield return BinaryData_File.FromObjectArray(nameof(rom.EnemyObjectDefinitions), rom.EnemyObjectDefinitions);
     }
 }

@@ -35,4 +35,23 @@ public class BinaryData_File
         if (FileObject != null && AutoRetrieveFileObjectDataItems)
             yield return FileObject.GetBinaryDataItems("FileData");
     }
+
+    public static BinaryData_File FromObjectArray<T>(string header, T[] fileObjects)
+        where T : BinarySerializable, new()
+    {
+        if (fileObjects == null) 
+            throw new ArgumentNullException(nameof(fileObjects));
+
+        if (fileObjects.Length == 0)
+            throw new ArgumentException("Value cannot be an empty collection.", nameof(fileObjects));
+
+        ObjectArray<T> objArray = new();
+
+        objArray.Init(fileObjects.First().Offset);
+
+        objArray.Pre_Length = fileObjects.Length;
+        objArray.Value = fileObjects;
+
+        return new BinaryData_File(header, objArray);
+    }
 }
