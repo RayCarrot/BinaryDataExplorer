@@ -15,6 +15,8 @@ Data explorer tool for [BinarySerializer](https://github.com/RayCarrot/BinarySer
         * BIN
     * Klonoa 2: Lunatea's Veil
         * BIN
+    * Klonoa Heroes
+        * ROM
 * [PS1](https://github.com/RayCarrot/BinarySerializer.PS1)
     * Default
         * TIM
