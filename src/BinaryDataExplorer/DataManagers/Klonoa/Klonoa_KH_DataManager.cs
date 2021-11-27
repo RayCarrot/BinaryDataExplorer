@@ -32,6 +32,9 @@ public class Klonoa_KH_DataManager : Klonoa_DataManager
         // Get the settings
         KlonoaSettings_KH settings = (KlonoaSettings_KH)mode;
 
+        // Don't serialize any maps by default as they're very slow (due to the tiles)
+        settings.SerializeMap = new KlonoaSettings_KH.MapID(-1, -1, -1);
+
         // Add the settings to the context
         context.AddKlonoaSettings(settings);
 
@@ -102,7 +105,7 @@ public class Klonoa_KH_DataManager : Klonoa_DataManager
         yield return new BinaryData_File(nameof(rom.MapsPack), null)
         {
             HasFiles = true,
-            GetFilesFunc = () => GetArchiveFilesAsync(rom.MapsPack)
+            GetFilesFunc = () => GetMapFilesAsync(rom.MapsPack)
         };
 
         // World map pack
@@ -114,5 +117,21 @@ public class Klonoa_KH_DataManager : Klonoa_DataManager
 
         // Enemy object definitions
         yield return BinaryData_File.FromObjectArray(nameof(rom.EnemyObjectDefinitions), rom.EnemyObjectDefinitions);
+    }
+
+    public async IAsyncEnumerable<BinaryData_File> GetMapFilesAsync(MapsPack_ArchiveFile maps)
+    {
+        await Task.CompletedTask;
+
+        for (int i = 0; i < maps.Maps.Length; i++)
+        {
+            int index = i;
+            OffsetTable.KH_KW_Entry entry = maps.OffsetTable.KH_KW_Entries[index];
+
+            yield return new BinaryData_File($"{i} ({typeof(Map_File).GetFriendlyName()}) - Map {entry.MapID1}-{entry.MapID2}-{entry.MapID3}", null)
+            {
+                GetAdditionalDataItemsFunc = () => maps.GetMap(index).GetBinaryDataItems("Map").Yield()
+            };
+        }
     }
 }
