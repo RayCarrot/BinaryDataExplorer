@@ -12,6 +12,7 @@
     <Product>Binary Data Explorer</Product>
     <PackageProjectUrl>https://github.com/RayCarrot/BinaryDataExplorer</PackageProjectUrl>
     <RepositoryUrl>https://github.com/RayCarrot/BinaryDataExplorer</RepositoryUrl>
+    <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
   </PropertyGroup>
 
   <!-- Package references -->
