@@ -93,21 +93,22 @@ public class Klonoa_DTP_DataManager : Klonoa_DataManager
             if (loadCmd.FILE_Type == IDXLoadCommand.FileType.Code)
                 loader.ProcessBINFile(fileIndex);
 
-            var fileObj = new BinaryData_File($"{fileIndex} ({loadCmd.FILE_Type})", fileData)
+            yield return new BinaryData_File($"{fileIndex} ({loadCmd.FILE_Type})", fileData)
             {
                 HasFiles = fileData is ArchiveFile archive && archive.OffsetTable.FilesCount > 0,
                 GetFilesFunc = () => GetArchiveFilesAsync(fileData),
                 AutoRetrieveFileObjectDataItems = fileData is { } and not ArchiveFile,
                 GetAdditionalDataItemsFunc = () => loadCmd.GetBinaryDataItems("LoadCommand").Yield(),
             };
-
-            yield return fileObj;
         }
 
         if (loader.BINBlock >= loader.Settings.BLOCK_FirstLevel)
         {
             // Load the level code data
             loader.ProcessLevelData();
+
+            yield return new BinaryData_File($"LevelData_2D", loader.LevelData2D);
+            yield return new BinaryData_File($"LevelData_3D", loader.LevelData3D);
 
             // Load the hard-coded objects data
             if (loader.LevelPack?.Sectors != null)
