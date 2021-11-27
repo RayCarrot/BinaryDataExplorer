@@ -55,7 +55,7 @@ public class AppViewModel : BaseViewModel
     #region Public Properties
 
     public string Title => $"Binary Data Explorer - {CurrentAppVersion}";
-    public Version CurrentAppVersion => new Version(0, 1, 0, 0);
+    public Version CurrentAppVersion => new Version(0, 2, 0, 0);
     public AppUserData UserData { get; set; }
 
     public BinaryDataViewModel BinaryData { get; }
