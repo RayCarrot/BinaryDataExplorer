@@ -1,0 +1,27 @@
+[submodule "submodules/BinarySerializer.Ray1"]
+	path = submodules/BinarySerializer.Ray1
+	url = https://github.com/BinarySerializer/BinarySerializer.Ray1
+[submodule "submodules/BinarySerializer.PS2"]
+	path = submodules/BinarySerializer.PS2
+	url = https://github.com/BinarySerializer/BinarySerializer.PS2
+[submodule "submodules/BinarySerializer.PS1"]
+	path = submodules/BinarySerializer.PS1
+	url = https://github.com/BinarySerializer/BinarySerializer.PS1
+[submodule "submodules/BinarySerializer.Klonoa"]
+	path = submodules/BinarySerializer.Klonoa
+	url = https://github.com/BinarySerializer/BinarySerializer.Klonoa
+[submodule "submodules/BinarySerializer.Image"]
+	path = submodules/BinarySerializer.Image
+	url = https://github.com/BinarySerializer/BinarySerializer.Image
+[submodule "submodules/BinarySerializer.GBA"]
+	path = submodules/BinarySerializer.GBA
+	url = https://github.com/BinarySerializer/BinarySerializer.GBA
+[submodule "submodules/BinarySerializer.GBA.Audio"]
+	path = submodules/BinarySerializer.GBA.Audio
+	url = https://github.com/BinarySerializer/BinarySerializer.GBA.Audio
+[submodule "submodules/BinarySerializer.Audio"]
+	path = submodules/BinarySerializer.Audio
+	url = https://github.com/BinarySerializer/BinarySerializer.Audio
+[submodule "submodules/BinarySerializer"]
+	path = submodules/BinarySerializer
+	url = https://github.com/BinarySerializer/BinarySerializer
