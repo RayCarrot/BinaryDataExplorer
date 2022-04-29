@@ -1,5 +1,4 @@
-﻿using BinarySerializer.GBA;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace BinaryDataExplorer;
 
@@ -9,7 +8,7 @@ public class GBA_DataManager : GenericDataManager
 
     public override IEnumerable<IDataManager.FileType> GetFileTypes() => new IDataManager.FileType[]
     {
-        new IDataManager.FileType("GBC ROM", typeof(GBC_ROMBase), "gbc_rom"),
-        new IDataManager.FileType("GBA ROM", typeof(GBA_ROMBase), "gba_rom"),
+        new IDataManager.FileType("GB/GBC ROM", typeof(BinarySerializer.Nintendo.GB.ROMBase), "gb_rom"),
+        new IDataManager.FileType("GBA ROM", typeof(BinarySerializer.Nintendo.GBA.ROMBase), "gba_rom"),
     };
 }

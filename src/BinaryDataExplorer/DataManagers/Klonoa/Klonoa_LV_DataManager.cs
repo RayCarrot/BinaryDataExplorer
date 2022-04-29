@@ -49,7 +49,7 @@ public class Klonoa_LV_DataManager : Klonoa_DataManager
         context.AddKlonoaSettings(settings);
 
         // Load the IDX
-        HeadPack_ArchiveFile headPack = FileFactory.Read<HeadPack_ArchiveFile>(settings.FilePath_HEAD, context, (_, head) => head.Pre_HasMultipleLanguages = settings.HasMultipleLanguages);
+        HeadPack_ArchiveFile headPack = FileFactory.Read<HeadPack_ArchiveFile>(context, settings.FilePath_HEAD, (_, head) => head.Pre_HasMultipleLanguages = settings.HasMultipleLanguages);
 
         // Create the loader
         var loader = Loader.Create(context, headPack);

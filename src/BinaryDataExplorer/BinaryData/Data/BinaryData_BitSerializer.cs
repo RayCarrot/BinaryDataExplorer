@@ -12,7 +12,7 @@ namespace BinaryDataExplorer
         public new BinaryData_Serializer SerializerObject => (BinaryData_Serializer)base.SerializerObject;
         public int ValueSize { get; }
 
-        public override T SerializeBits<T>(T value, int length, string name = null)
+        public override T SerializeBits<T>(T value, int length, SignedNumberRepresentation sign = SignedNumberRepresentation.Unsigned, string name = null)
         {
             SerializerObject.AddDataItem(new BinaryData_BitValueItemViewModel(SerializerObject.CurrentDataItem, ValueOffset, Position, length, ValueSize, name, value, typeof(T)));
 

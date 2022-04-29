@@ -13,7 +13,7 @@ public class Klonoa_DTP_DataManager : Klonoa_DataManager
 
     public override IEnumerable<IDataManager.DefaultFile> GetDefaultFiles(object mode)
     {
-        var config = (KlonoaSettings_DTP)mode;
+        var config = (KlonoaSettings_DTP_PS1)mode;
 
         return new IDataManager.DefaultFile[]
         {
@@ -32,13 +32,13 @@ public class Klonoa_DTP_DataManager : Klonoa_DataManager
     public override IAsyncEnumerable<BinaryData_FileViewModel> LoadAsync(Context context, object mode, IDataManager.ProfileFile[] files)
     {
         // Get the settings
-        KlonoaSettings_DTP settings = (KlonoaSettings_DTP)mode;
+        KlonoaSettings_DTP_PS1 settings = (KlonoaSettings_DTP_PS1)mode;
 
         // Add the settings to the context
         context.AddKlonoaSettings(settings);
 
         // Load the IDX
-        IDX idxData = FileFactory.Read<IDX>(settings.FilePath_IDX, context);
+        IDX idxData = FileFactory.Read<IDX>(context, settings.FilePath_IDX);
 
         // Create the loader
         var loader = Loader.Create(context, idxData);

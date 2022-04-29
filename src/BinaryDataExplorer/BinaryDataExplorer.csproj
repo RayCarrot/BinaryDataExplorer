@@ -39,10 +39,10 @@
   <!-- Project references -->
   <ItemGroup>
     <!-- Binary serializer -->
+    <ProjectReference Include="..\..\submodules\BinarySerializer.Audio.GBA\src\BinarySerializer.Audio.GBA.csproj" />
+    <ProjectReference Include="..\..\submodules\BinarySerializer.Nintendo\src\BinarySerializer.Nintendo.csproj" />
     <ProjectReference Include="..\..\submodules\BinarySerializer\src\BinarySerializer.csproj" />
     <ProjectReference Include="..\..\submodules\BinarySerializer.Audio\src\BinarySerializer.Audio.csproj" />
-    <ProjectReference Include="..\..\submodules\BinarySerializer.GBA\src\BinarySerializer.GBA.csproj" />
-    <ProjectReference Include="..\..\submodules\BinarySerializer.GBA.Audio\src\BinarySerializer.GBA.Audio.csproj" />
     <ProjectReference Include="..\..\submodules\BinarySerializer.Image\src\BinarySerializer.Image.csproj" />
     <ProjectReference Include="..\..\submodules\BinarySerializer.Klonoa\src\BinarySerializer.Klonoa.DTP\BinarySerializer.Klonoa.DTP.csproj" />
     <ProjectReference Include="..\..\submodules\BinarySerializer.Klonoa\src\BinarySerializer.Klonoa.KH\BinarySerializer.Klonoa.KH.csproj" />

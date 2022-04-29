@@ -83,9 +83,9 @@ public class BinaryData_Serializer : SerializerObject, IDisposable
 
     #region Logging
 
-    public override void Log(string logString)
+    public override void Log(string logString, params object[] args)
     {
-        AddDataItem(new BinaryData_LogItemViewModel(CurrentDataItem, CurrentPointer, logString));
+        AddDataItem(new BinaryData_LogItemViewModel(CurrentDataItem, CurrentPointer, String.Format(logString, args)));
     }
 
     #endregion
@@ -264,7 +264,7 @@ public class BinaryData_Serializer : SerializerObject, IDisposable
         return obj;
     }
 
-    public override Pointer SerializePointer(Pointer obj, PointerSize size = PointerSize.Pointer32, Pointer anchor = null, bool allowInvalid = false, string name = null)
+    public override Pointer SerializePointer(Pointer obj, PointerSize size = PointerSize.Pointer32, Pointer anchor = null, bool allowInvalid = false, long? nullValue = null, string name = null)
     {
         AddDataItem(new BinaryData_PointerItemViewModel(CurrentDataItem, CurrentPointer, name, obj));
 
@@ -279,7 +279,7 @@ public class BinaryData_Serializer : SerializerObject, IDisposable
         return obj;
     }
 
-    public override Pointer<T> SerializePointer<T>(Pointer<T> obj, PointerSize size = PointerSize.Pointer32, Pointer anchor = null, bool resolve = false, Action<T> onPreSerialize = null, bool allowInvalid = false, string name = null)
+    public override Pointer<T> SerializePointer<T>(Pointer<T> obj, PointerSize size = PointerSize.Pointer32, Pointer anchor = null, bool resolve = false, Action<T> onPreSerialize = null, bool allowInvalid = false, long? nullValue = null, string name = null)
     {
         AddDataItem(new BinaryData_PointerItemViewModel(CurrentDataItem, CurrentPointer, name, obj.PointerValue));
 
@@ -345,7 +345,7 @@ public class BinaryData_Serializer : SerializerObject, IDisposable
         return buffer;
     }
 
-    public override T[] SerializeObjectArray<T>(T[] obj, long count, Action<T> onPreSerialize = null, string name = null)
+    public override T[] SerializeObjectArray<T>(T[] obj, long count, Action<T, int> onPreSerialize = null, string name = null)
     {
         var dataItem = AddDataItem(new BinaryData_ArrayItemViewModel(CurrentDataItem, CurrentPointer, typeof(T), count, name, null));
         AscendDataItemsHierarchy(dataItem);
@@ -354,13 +354,23 @@ public class BinaryData_Serializer : SerializerObject, IDisposable
 
         for (int i = 0; i < count; i++)
             // Read the value
-            SerializeObject<T>(buffer[i], onPreSerialize: onPreSerialize, name: $"{name}[{i}]");
+            SerializeObject<T>(buffer[i], onPreSerialize: onPreSerialize == null ? null : x => onPreSerialize(x, i), name: $"{name}[{i}]");
 
         DescendDataItemsHierarchy();
         return buffer;
     }
 
-    public override Pointer[] SerializePointerArray(Pointer[] obj, long count, PointerSize size = PointerSize.Pointer32, Pointer anchor = null, bool allowInvalid = false, string name = null)
+    public override T[] SerializeArrayUntil<T>(T[] obj, Func<T, bool> conditionCheckFunc, Func<T> getLastObjFunc = null, string name = null)
+    {
+        return SerializeArray<T>(obj, obj?.Length ?? 0, name: name);
+    }
+
+    public override T[] SerializeObjectArrayUntil<T>(T[] obj, Func<T, bool> conditionCheckFunc, Func<T> getLastObjFunc = null, Action<T, int> onPreSerialize = null, string name = null)
+    {
+        return SerializeObjectArray<T>(obj, obj?.Length ?? 0, name: name);
+    }
+
+    public override Pointer[] SerializePointerArray(Pointer[] obj, long count, PointerSize size = PointerSize.Pointer32, Pointer anchor = null, bool allowInvalid = false, long? nullValue = null, string name = null)
     {
         var dataItem = AddDataItem(new BinaryData_ArrayItemViewModel(CurrentDataItem, CurrentPointer, typeof(Pointer), count, name, null));
         AscendDataItemsHierarchy(dataItem);
@@ -375,7 +385,7 @@ public class BinaryData_Serializer : SerializerObject, IDisposable
         return buffer;
     }
 
-    public override Pointer<T>[] SerializePointerArray<T>(Pointer<T>[] obj, long count, PointerSize size = PointerSize.Pointer32, Pointer anchor = null, bool resolve = false, Action<T> onPreSerialize = null, bool allowInvalid = false, string name = null)
+    public override Pointer<T>[] SerializePointerArray<T>(Pointer<T>[] obj, long count, PointerSize size = PointerSize.Pointer32, Pointer anchor = null, bool resolve = false, Action<T, int> onPreSerialize = null, bool allowInvalid = false, long? nullValue = null, string name = null)
     {
         var dataItem = AddDataItem(new BinaryData_ArrayItemViewModel(CurrentDataItem, CurrentPointer, typeof(Pointer<T>), count, name, null));
         AscendDataItemsHierarchy(dataItem);
@@ -384,7 +394,7 @@ public class BinaryData_Serializer : SerializerObject, IDisposable
 
         for (int i = 0; i < count; i++)
             // Read the value
-            SerializePointer<T>(buffer[i], anchor: anchor, resolve: resolve, onPreSerialize: onPreSerialize, allowInvalid: allowInvalid, name: $"{name}[{i}]");
+            SerializePointer<T>(buffer[i], anchor: anchor, resolve: resolve, onPreSerialize: onPreSerialize == null ? null : x => onPreSerialize(x, i), allowInvalid: allowInvalid, name: $"{name}[{i}]");
 
         DescendDataItemsHierarchy();
         return buffer;

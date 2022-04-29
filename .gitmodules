@@ -13,15 +13,15 @@
 [submodule "submodules/BinarySerializer.Image"]
 	path = submodules/BinarySerializer.Image
 	url = https://github.com/BinarySerializer/BinarySerializer.Image
-[submodule "submodules/BinarySerializer.GBA"]
-	path = submodules/BinarySerializer.GBA
-	url = https://github.com/BinarySerializer/BinarySerializer.GBA
-[submodule "submodules/BinarySerializer.GBA.Audio"]
-	path = submodules/BinarySerializer.GBA.Audio
-	url = https://github.com/BinarySerializer/BinarySerializer.GBA.Audio
 [submodule "submodules/BinarySerializer.Audio"]
 	path = submodules/BinarySerializer.Audio
 	url = https://github.com/BinarySerializer/BinarySerializer.Audio
 [submodule "submodules/BinarySerializer"]
 	path = submodules/BinarySerializer
 	url = https://github.com/BinarySerializer/BinarySerializer
+[submodule "submodules/BinarySerializer.Nintendo"]
+	path = submodules/BinarySerializer.Nintendo
+	url = https://github.com/BinarySerializer/BinarySerializer.Nintendo
+[submodule "submodules/BinarySerializer.Audio.GBA"]
+	path = submodules/BinarySerializer.Audio.GBA
+	url = https://github.com/BinarySerializer/BinarySerializer.Audio.GBA

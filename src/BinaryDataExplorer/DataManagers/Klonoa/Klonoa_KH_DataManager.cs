@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using BinarySerializer;
-using BinarySerializer.GBA;
 using BinarySerializer.Klonoa;
 using BinarySerializer.Klonoa.KH;
+using BinarySerializer.Nintendo.GBA;
 
 namespace BinaryDataExplorer;
 
@@ -18,7 +18,7 @@ public class Klonoa_KH_DataManager : Klonoa_DataManager
     {
         return new IDataManager.DefaultFile[]
         {
-            new IDataManager.DefaultFile(ROMFileName, GBAConstants.Address_ROM),
+            new IDataManager.DefaultFile(ROMFileName, Constants.Address_ROM),
         };
     }
 
@@ -42,7 +42,7 @@ public class Klonoa_KH_DataManager : Klonoa_DataManager
         context.AddPreDefinedPointers(DefinedPointers.GBA_JP);
 
         // Load the ROM
-        KlonoaHeroesROM rom = FileFactory.Read<KlonoaHeroesROM>(ROMFileName, context);
+        KlonoaHeroesROM rom = FileFactory.Read<KlonoaHeroesROM>(context, ROMFileName);
 
         // Add the ROM
         return new BinaryData_FileViewModel[]
